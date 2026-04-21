@@ -11,9 +11,9 @@ class Tank {
     speed = 2;
     health = 100;
     iTankW = loadImage("tank.png");
-    iTankA = loadImage("tank.png");
-    iTankS = loadImage("tank.png");
-    iTankD = loadImage("tank.png");
+    iTankA = loadImage("tank1.png");
+    iTankS = loadImage("tank3.png");
+    iTankD = loadImage("tank2.png");
     idir = 'w';
 
   }
@@ -36,18 +36,18 @@ class Tank {
 
 
   void move(char dir) {
-   if (dir == 'd') {        // right
+    idir = dir;
+   if (dir == 'd') {        
     x += speed;
     w += speed;
   } 
-  else if (dir == 'a') {   // left
-    x -= speed;
+  else if (dir == 'a') {  
     w -= speed;
   } 
-  else if (dir == 'w') {   // up
+  else if (dir == 'w') {  
     y -= speed;
   } 
-  else if (dir == 's') {   // down
+  else if (dir == 's') {   
     y += speed;
   }
   }
