@@ -1,5 +1,5 @@
 class Tank {
-  int x, y, w, h, speed, health;
+  int x, y, w, h, speed, health, dx, dy;
   PImage iTankW, iTankA, iTankS, iTankD;
   char idir;
 
@@ -42,7 +42,7 @@ class Tank {
     w += speed;
   } 
   else if (dir == 'a') {  
-    w -= speed;
+    x -= speed;
   } 
   else if (dir == 'w') {  
     y -= speed;
@@ -51,4 +51,15 @@ class Tank {
     y += speed;
   }
   }
+  
+  boolean intersect (Obstacle o) {
+    
+    float distance = dist(x,y,o.x, o.y);
+    if (distance < 100) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
 }

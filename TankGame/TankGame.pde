@@ -4,33 +4,55 @@ Tank tank1;
 ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 int score;
+Timer obsTimer;
 
 void setup() {
   size(600, 600);
   bg = loadImage("bg1.png");
   tank1 = new Tank();
-  obstacles.add(new Obstacle(55, 500));
-  obstacles.add(new Obstacle(25, 400));
-  obstacles.add(new Obstacle(40, 300));
+  //obstacles.add(new Obstacle(55, 500));
+  //obstacles.add(new Obstacle(25, 400));
+  //obstacles.add(new Obstacle(40, 300));
   score = 0;
+  obsTimer = new Timer(1000);
+  obsTimer.start();
 }
 void draw() {
   background(127);
   imageMode(CORNER);
   image(bg, 0, 0);
-  // displaying objects
+  // add timer to distribute obstacles
+  if(obsTimer.isFinished() && obstacles.size() < 5) {
+  obstacles.add(new Obstacle(-100, int(random(height)),random(2,6), int(random(1, 5))));
+  obsTimer.start();
+}
+  // displaying obstacles
   for (int i = 0; i < obstacles.size(); i++) {
     Obstacle obs = obstacles.get(i);
     obs.display();
     obs.move();
-  
+    if (obs.reachedEdge()) {
+      obstacles.remove(i);
   }
-   for (int i = 0; i < projectiles.size(); i++) {
-    Projectile p = projectiles.get(i);
-    p.display();
-    p.move();
-   }
+ }
+  for (int j = 0; j < projectiles.size(); j++) {
+  Projectile p = projectiles.get(j);
+
+  p.move();
+  p.display();
+
+  if (p.reachedEdge()) {
+    projectiles.remove(j);
+    j--; // important to avoid skipping items
+  }
 }
+   
+   tank1.display();
+   scorePanel();
+   println("Objects in Memory:"+obstacles.size());
+   println("Projectiles in Memory:"+projectiles.size());
+}
+
 void scorePanel() {
   fill(127, 127);
   rectMode(CENTER);
@@ -54,5 +76,5 @@ void keyPressed() {
 }
 
 void mousePressed() {
-  projectiles.add(new Projectile(tank1.x, tank1.y));
+  projectiles.add(new Projectile(tank1.x, tank1.y, tank1.idir));
 }

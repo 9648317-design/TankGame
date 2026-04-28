@@ -1,15 +1,30 @@
 class Obstacle {
-  int x, y, w, h, speed, health;
+  float x, y, w, h, speed, health;
   PImage obst1;
+char idir;
 
-
-  Obstacle(int x, int y) {
-    this.x = x;
-    this.y = y;
-    w = 100;
-    h = 100;
-    speed = 2;
-    health = 100;
+  Obstacle(float w, float h, float speed, float health) {
+    this.w = w;
+    this.h = h;
+    this.speed = speed;
+    this.health = health;
+    if (int(random(4))==2) {
+      idir = 'w';
+      x = random(width);
+      y = height = 100;
+    } else if (int(random(3))==1) {
+      idir = 'd';
+      x = -100;
+      y = random(height);
+    } else if(int(random(2))==1) {
+      idir = 'a';
+      x = width+100;
+      y = random(height);
+    } else {
+      idir = 's';
+      x = random(width);
+      y= -100;
+    }
     obst1 = loadImage("obj.png");
   }
 
@@ -25,4 +40,8 @@ class Obstacle {
       x = 0;
     }
   }
+  
+  boolean reachedEdge() {
+    return x >= width+150 || x<= -150 || y > height + 150 || y < -150;
+  } 
 }
