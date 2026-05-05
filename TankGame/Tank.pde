@@ -2,6 +2,7 @@ class Tank {
   int x, y, w, h, speed, health, dx, dy;
   PImage iTankW, iTankA, iTankS, iTankD;
   char idir;
+  int turretCount, laserCount;
 
   Tank() {
     x = 100;

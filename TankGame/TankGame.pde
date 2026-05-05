@@ -3,8 +3,9 @@ PImage bg;
 Tank tank1;
 ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+ArrayList<PowerUp> powerups = new ArrayList<PowerUp>();
 int score;
-Timer obsTimer;
+Timer obsTimer, puTimer;
 
 void setup() {
   size(600, 600);
@@ -16,6 +17,9 @@ void setup() {
   score = 0;
   obsTimer = new Timer(1000);
   obsTimer.start();
+  
+   puTimer = new Timer(2000);  // ← THIS was missing
+  puTimer.start();
 }
 void draw() {
   background(127);
@@ -26,6 +30,36 @@ void draw() {
   obstacles.add(new Obstacle(-100, int(random(height)),random(2,6), int(random(1, 5))));
   obsTimer.start();
 }
+
+// Distribute powerups on a timer
+if (puTimer.isFinished()) {
+
+powerups.add(new PowerUp());
+puTimer.start();
+}
+
+// Display and remove powerups
+for (int i = 0; i < powerups.size(); i ++) {
+PowerUp pu = powerups.get(i);
+pu.display();
+pu.move();
+if (pu.reachedEdge()) {
+powerups.remove(pu);
+}
+if (pu.intersect(tank1)) {
+if (pu.type == 'h') {
+tank1.health = tank1.health + 100;
+powerups.remove(pu);
+} else if (pu.type == 'a') {
+tank1.laserCount = tank1.laserCount + 100;
+powerups.remove(pu);
+} else if (pu.type == 't') {
+tank1.turretCount = tank1.turretCount + 1;
+powerups.remove(pu);
+}
+}
+}
+
   // displaying obstacles
   for (int i = 0; i < obstacles.size(); i++) {
     Obstacle obs = obstacles.get(i);
@@ -40,6 +74,7 @@ void draw() {
 
   p.move();
   p.display();
+
 
   if (p.reachedEdge()) {
     projectiles.remove(j);
@@ -61,6 +96,8 @@ void scorePanel() {
   textSize(30);
   textAlign(CENTER);
   text("Score:" + score, width/2, 35);
+  text("Health:" + tank1.health, width/2-150, 25);
+  text("Ammo:" + tank1.laserCount, width/2+150, 25);
 }
 
 void keyPressed() {
